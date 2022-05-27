@@ -12,9 +12,9 @@
   - Toshiba Shorai
   - Carrier X Inverter (42TVAA)
 
-อาจรองรับ (ยังไม่ได้ทดสอบ):
- - Carrier Color Smart (42TVCA)
- - Carrier X Inverter Plus (42TVAB)
+#### อาจรองรับ (ยังไม่ได้ทดสอบ):
+  - Carrier Color Smart (42TVCA)
+  - Carrier X Inverter Plus (42TVAB)
 
 ## รองรับการสั่งงาน:
  - เปิด/ปิด

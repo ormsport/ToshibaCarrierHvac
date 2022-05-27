@@ -11,9 +11,9 @@ This library can make Arduino/NodeMCU communicate with Toshiba/Carrier HVAC Syst
   - Toshiba Shorai
   - Carrier X Inverter (42TVAA)
 
-And might support (not tested yet):
- - Carrier Color Smart (42TVCA)
- - Carrier X Inverter Plus (42TVAB)
+#### And might support (not tested yet):
+  - Carrier Color Smart (42TVCA)
+  - Carrier X Inverter Plus (42TVAB)
 
 ## Supported features:
  - Power ("off", "on")
@@ -48,14 +48,14 @@ Note: If using ESP8266 or ESP32 please always use with TTL level shifter (5V to 
 
 - Hardware serial
 ```C++
-ToshibaCarrierAc hvac(&Serial);
+ToshibaCarrierHvac hvac(&Serial);
 ```
 - Software serial
 ```C++
-ToshibaCarrierAc hvac(D5, D6); // RX, TX
+ToshibaCarrierHvac hvac(D5, D6); // RX, TX
 ```
 
-#### 3) Add handleAc to loop
+#### 3) Add handleHvac to loop
 ```C+
 void loop() {
     hvac.handleHvac();
