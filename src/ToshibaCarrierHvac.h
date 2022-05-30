@@ -17,13 +17,13 @@
 // software serial for AVR
 #if defined(HVAC_USE_SW_SERIAL) && defined(__AVR__)
     #include <CustomSoftwareSerial.h>
-    #define HVAC_DEBUG
+    // #define HVAC_DEBUG
 #endif
 
 // software serial for ESP8266
 #if defined(HVAC_USE_SW_SERIAL) && (defined(ESP8266))
     #include <SoftwareSerial.h>
-    #define HVAC_DEBUG
+    // #define HVAC_DEBUG
 #endif
 
 // show error about debug port
