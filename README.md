@@ -162,13 +162,13 @@ void setup() {
 ```
 
 ### Status Updated Callback
-This will callback when any status updated and return structure of current status (acStatus).
+This will callback when any status updated and return structure of current status (hvacStatus).
 ```C++
 hvac.setStatusUpdatedCallback(YourCallbackFunction);
 ```
 
 ### Settings Updated Callback
-This will callback when any setting updated and return structure of current settings (acSettings).
+This will callback when any setting updated and return structure of current settings (hvacSettings).
 ```C++
 hvac.setSettingsUpdatedCallback(YourCallbackFunction);
 ```
