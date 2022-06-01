@@ -162,13 +162,13 @@ void setup() {
 ```
 
 ### Status Updated Callback
-This will callback when any status updated and return structure of current status (hvacStatus).
+This will callback when any status updated and return structure of current status (acStatus).
 ```C++
 hvac.setStatusUpdatedCallback(YourCallbackFunction);
 ```
 
 ### Settings Updated Callback
-This will callback when any setting updated and return structure of current settings (hvacSettings).
+This will callback when any setting updated and return structure of current settings (acSettings).
 ```C++
 hvac.setSettingsUpdatedCallback(YourCallbackFunction);
 ```
@@ -185,6 +185,13 @@ This will callback when any status or any setting updated and return name of upd
 hvac.setWhichFunctionUpdatedCallback(YourCallbackFunction);
 ```
 
+## Send custom packet
+The custom packet size must be 8 to 17 bytes. This function just send your packet without checking anything so please carefully use.
+```C++
+byte myPacket[] = {2, 0, 3, 144, 0, 0, 9, 1, 48, 1, 0, 0, 0, 2, 163, 65, 76};
+hvac.sendCustomPacket(myPacket, sizeof(myPacket));
+```
+
 ## TO DO:
-- [ ] Send custom packet
+- [x] Send custom packet
 - [ ] Callback function for debug

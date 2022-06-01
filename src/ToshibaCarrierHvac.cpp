@@ -57,7 +57,7 @@ void ToshibaCarrierHvac::setWhichFunctionUpdatedCallback(WHICH_FUNCTION_UPDATED_
 }
 
 // normal function
-void ToshibaCarrierHvac::sendCommand(byte data[], size_t dataLen) {
+void ToshibaCarrierHvac::sendPacket(byte data[], size_t dataLen) {
     _serial->write(data, dataLen);
     _lastSendWake = millis();
     _sendWake = 1;
@@ -72,7 +72,7 @@ void ToshibaCarrierHvac::sendCommand(byte data[], size_t dataLen) {
     #endif
 }
 
-void ToshibaCarrierHvac::sendCommand(const byte data[], size_t dataLen) {
+void ToshibaCarrierHvac::sendPacket(const byte data[], size_t dataLen) {
     _serial->write(data, dataLen);
     _lastSendWake = millis();
     _sendWake = 1;
@@ -139,7 +139,7 @@ bool ToshibaCarrierHvac::createPacket(const byte header[], size_t headerLen, byt
         #endif
 
         // send created packet
-        sendCommand(packet, sizeof(packet));
+        sendPacket(packet, sizeof(packet));
         return true;
     } else if (dataType == 1) {     // query packet
         byte packet[14];    // 14 bytes
@@ -160,7 +160,7 @@ bool ToshibaCarrierHvac::createPacket(const byte header[], size_t headerLen, byt
         #endif
 
         // send created packet
-        sendCommand(packet, sizeof(packet));
+        sendPacket(packet, sizeof(packet));
         return true;
     }
     return false;
@@ -168,17 +168,17 @@ bool ToshibaCarrierHvac::createPacket(const byte header[], size_t headerLen, byt
 
 void ToshibaCarrierHvac::sendHandshake(void) {
     if (_firstRun && !_connected) { // send first handshake
-        sendCommand(HANDSHAKE_SYN_PACKET_1, sizeof(HANDSHAKE_SYN_PACKET_1));
+        sendPacket(HANDSHAKE_SYN_PACKET_1, sizeof(HANDSHAKE_SYN_PACKET_1));
         delay(200);
-        sendCommand(HANDSHAKE_SYN_PACKET_2, sizeof(HANDSHAKE_SYN_PACKET_2));
+        sendPacket(HANDSHAKE_SYN_PACKET_2, sizeof(HANDSHAKE_SYN_PACKET_2));
         delay(200);
-        sendCommand(HANDSHAKE_SYN_PACKET_3, sizeof(HANDSHAKE_SYN_PACKET_3));
+        sendPacket(HANDSHAKE_SYN_PACKET_3, sizeof(HANDSHAKE_SYN_PACKET_3));
         delay(200);
-        sendCommand(HANDSHAKE_SYN_PACKET_4, sizeof(HANDSHAKE_SYN_PACKET_4));
+        sendPacket(HANDSHAKE_SYN_PACKET_4, sizeof(HANDSHAKE_SYN_PACKET_4));
         delay(200);
-        sendCommand(HANDSHAKE_SYN_PACKET_5, sizeof(HANDSHAKE_SYN_PACKET_5));
+        sendPacket(HANDSHAKE_SYN_PACKET_5, sizeof(HANDSHAKE_SYN_PACKET_5));
         delay(200);
-        sendCommand(HANDSHAKE_SYN_PACKET_6, sizeof(HANDSHAKE_SYN_PACKET_6));
+        sendPacket(HANDSHAKE_SYN_PACKET_6, sizeof(HANDSHAKE_SYN_PACKET_6));
         delay(200);
         _sendWake = 1;
         _lastSendWake = millis();
@@ -186,9 +186,9 @@ void ToshibaCarrierHvac::sendHandshake(void) {
         DEBUG_PORT.println(F("HVAC> First handshake sent. Waiting for SYN/ACK packet"));
         #endif
     } else if (_handshake && !_connected && !_ready) {  // when received syn/ack then send ack
-        sendCommand(HANDSHAKE_ACK_PACKET_1, sizeof(HANDSHAKE_ACK_PACKET_1));
+        sendPacket(HANDSHAKE_ACK_PACKET_1, sizeof(HANDSHAKE_ACK_PACKET_1));
         delay(200);
-        sendCommand(HANDSHAKE_ACK_PACKET_2, sizeof(HANDSHAKE_ACK_PACKET_2));
+        sendPacket(HANDSHAKE_ACK_PACKET_2, sizeof(HANDSHAKE_ACK_PACKET_2));
         delay(100);
         #ifdef HVAC_DEBUG
         DEBUG_PORT.println(F("HVAC> Waiting for ready feedback"));
@@ -1122,6 +1122,15 @@ void ToshibaCarrierHvac::handleHvac(void) {
     } else if ((_updateCallbackBucket > 1) && ((millis() - _lastUpdateCallback) >= MULTI_QUEUE_TIMEOUT)) {
         updateCallback();
         _updateCallbackBucket = 0;
+    }
+}
+
+bool ToshibaCarrierHvac::sendCustomPacket(byte data[], size_t length) {
+    if ((length >= 8) && (length <= 17)) {
+        sendPacket(data, length);
+        return true;
+    } else {
+        return false;
     }
 }
 

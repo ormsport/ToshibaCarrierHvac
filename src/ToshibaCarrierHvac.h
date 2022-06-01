@@ -150,8 +150,8 @@ class ToshibaCarrierHvac {
         const byte TIMER_BYTE[2] = {66, 65};
         const char* OFF_ON_MAP[3] = {"off", "on", "UNKNOWN"};
 
-        void sendCommand(byte data[], size_t dataLen);
-        void sendCommand(const byte data[], size_t dataLen);
+        void sendPacket(byte data[], size_t dataLen);
+        void sendPacket(const byte data[], size_t dataLen);
         byte getByteByName(const byte byteMap[], const char* valMap[], size_t valLen, const char* name);
         const char* getNameByByte(const char* valMap[], const byte byteMap[], size_t valLen, byte byteVal);
         byte checksum(uint16_t key, size_t fnByte, byte fnVal);
@@ -206,5 +206,7 @@ class ToshibaCarrierHvac {
         bool isCduRunning(void);
         bool isConnected(void);
         void forceQueryAllData(void);
+
+        bool sendCustomPacket(byte data[], size_t length);
 };
 #endif // ToshibaCarrierHvac_H

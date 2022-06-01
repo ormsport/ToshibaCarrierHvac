@@ -87,7 +87,7 @@ void whichFunctionUpdated(const char* function) {
     } else if (function == "PSEL") {
         Serial.print("Power select updated: ");
         Serial.println(hvac.getPowerSelect());
-    } else if (function == "COMPMODE") {
+    } else if (function == "OP") {
         Serial.print("Operation updated: ");
         Serial.println(hvac.getOperation());
     } else if (function == "OFFTIMER") {
