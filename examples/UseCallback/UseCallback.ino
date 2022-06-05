@@ -1,6 +1,6 @@
 /*
 *   This sketch show how to use callback to a custom function.
-*   *: You can use only one callback has this mark.
+*   *: You can use only one callback in your sketch.
 */
 
 #include <ToshibaCarrierHvac.h>

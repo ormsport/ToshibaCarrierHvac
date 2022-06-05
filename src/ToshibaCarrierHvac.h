@@ -120,14 +120,11 @@ class ToshibaCarrierHvac {
         const byte CONFIRM_HEADER[3] = {2, 0, 2};
         const byte PACKET_HEADER[3] = {2, 0, 3};
 
-        const byte PACKET_TYPE[5]      = {128, 130, 16, 17, 144};
-        const char* PACKET_TYPE_MAP[6] = {"SYN/ACK", "ACK", "COMMAND", "FEEDBACK", "REPLY", "UNKNOWN"};
+        const byte PACKET_TYPE[5]      = {16, 17, 128, 130, 144};
+        const char* PACKET_TYPE_MAP[6] = {"COMMAND", "FEEDBACK", "SYN/ACK", "ACK", "REPLY", "UNKNOWN"};
 
-        const byte DATA_TYPE[2] = {1, 2};
-        const char* DATA_TYPE_MAP[3] = {"QUERY", "SETTING", "UNKNOWN"};
-
-        const byte FUNCTION_BYTE[13] = {128, 135, 136, 144, 148, 160, 163, 176, 179, 187, 190, 199, 247};
-        const char* FUNCTION_BYTE_MAP[14] = {"STATE", "PSEL", "STATUS", "ONTIMER","OFFTIMER", "FANMODE", "SWING", "MODE", "SETPOINT", "ROOMTEMP", "OUTSIDETEMP", "PURE", "OP", "UNKNOWN"};
+        const byte FUNCTION_BYTE[14] = {128, 135, 136, 144, 148, 160, 163, 176, 179, 187, 190, 199, 247, 248};
+        const char* FUNCTION_BYTE_MAP[15] = {"STATE", "PSEL", "STATUS", "ONTIMER","OFFTIMER", "FANMODE", "SWING", "MODE", "SETPOINT", "ROOMTEMP", "OUTSIDETEMP", "PURE", "OP", "FN_GROUP_1", "UNKNOWN"};
 
         const byte MODE_BYTE[5] = {65, 66, 67, 68, 69};
         const char* MODE_BYTE_MAP[6] = {"auto", "cool", "heat", "dry", "fan_only", "UNKNOWN"};
@@ -154,14 +151,14 @@ class ToshibaCarrierHvac {
         void sendPacket(const byte data[], size_t dataLen);
         byte getByteByName(const byte byteMap[], const char* valMap[], size_t valLen, const char* name);
         const char* getNameByByte(const char* valMap[], const byte byteMap[], size_t valLen, byte byteVal);
-        byte checksum(uint16_t key, size_t fnByte, byte fnVal);
+        byte checksum(uint16_t baseKey, byte data[], size_t dataLen);
         int8_t temperatureCorrection(byte val);
-        bool createPacket(const byte header[], size_t headerLen, const byte packetType, const byte dataType, const byte fnCode, const byte fnVal);
+        bool createPacket(const byte header[], size_t headerLen, byte packetType, byte data[],byte dataLen);
         void sendHandshake(void);
         void queryall(void);
         void queryTemperature(void);
         bool syncUserSettings(void);
-        bool processData(byte* data, size_t dataLen);
+        bool processData(byte data[], size_t dataLen);
         bool readPacket(byte data[], size_t dataLen);
         bool findHeader(byte data[], size_t dataLen, const byte header[], size_t headerLen);
         uint8_t findHeaderStart(byte data[], size_t dataLen, const byte header[], size_t headerLen);

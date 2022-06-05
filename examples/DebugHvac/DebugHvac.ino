@@ -1,7 +1,7 @@
 /*
 *   This sketch will print all feedback and raw data received from HVAC
 *   ***Not recommend to debug with ESP-01***
-*   To debug your HVAC please uncommect "#define HVAC_DEBUG" in "ToshibaCarrierHvac.h".
+*   To debug your HVAC please uncomment "#define HVAC_DEBUG" in "ToshibaCarrierHvac.h".
 *   for ESP8266 and Arduino Uno please use software serial
 *   for ESP32 changes tx and rx pin to &Serial2
 */
