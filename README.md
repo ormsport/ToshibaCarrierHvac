@@ -33,7 +33,7 @@ This library can make Arduino/NodeMCU communicate with Toshiba/Carrier HVAC Syst
 See images [here](/images)
  
 ## Sample Circuit
-Note: If using ESP8266 or ESP32 please always use with TTL level shifter (5V to 3.3V TTL)
+Note: If using ESP8266 or ESP32 please always use with TTL shifter (5V to 3.3V TTL)
  
 ![Sample Circuit](images/circuit.png?raw=true "Sample Circuit")
  
