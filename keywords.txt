@@ -37,6 +37,7 @@ getOperation	KEYWORD2
 isCduRunning	KEYWORD2
 isConnected	KEYWORD2
 forceQueryAllData	KEYWORD2
+sendCustomPacket	KEYWORD2
 
 #######################################
 # Structures (KEYWORD3)
