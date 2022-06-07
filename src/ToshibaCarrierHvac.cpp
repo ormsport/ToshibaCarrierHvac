@@ -431,8 +431,10 @@ bool ToshibaCarrierHvac::processData(byte data[], size_t dataLen) {
                 #ifdef HVAC_DEBUG
                 DEBUG_PORT.println(F("READY"));
                 #endif
-                _connected = true;
-                _ready = _sendWake = true;
+                if (!_connected) {
+                    _connected = true;
+                    _ready = _handshake = false;
+                }
                 return true;
             } else {
                 #ifdef HVAC_DEBUG
@@ -950,17 +952,17 @@ bool ToshibaCarrierHvac::readPacket(byte data[], size_t dataLen) {
         #ifdef HVAC_DEBUG
         DEBUG_PORT.println(F("HVAC> Received confirm handshake, your code may crash or hw problem cause node mcu restarted"));
         #endif
-        _ready = _handshake = _init = false;
+        _ready = _handshake = false;
         _connected = true;
         return true;
-    } else if (_connected && _init) {   // unknown
+    } else {   // unknown
         #ifdef HVAC_DEBUG
         DEBUG_PORT.print(F("HVAC> Received "));
         DEBUG_PORT.print(getNameByByte(PACKET_TYPE_MAP, PACKET_TYPE, sizeof(PACKET_TYPE_MAP), data[3]));
         DEBUG_PORT.println(F(" packet from hvac"));
         #endif
         return false;
-    } else return false;
+    }
 }
 
 bool ToshibaCarrierHvac::findHeader(byte data[], size_t dataLen, const byte header[], size_t headerLen) {
@@ -1138,9 +1140,9 @@ void ToshibaCarrierHvac::handleHvac(void) {
         #ifdef HVAC_DEBUG
         DEBUG_PORT.println(F("HVAC> Max idle timeout reached"));
         #endif
+        _sendWake = true;
         // try to query temperature
         queryTemperature();
-        _sendWake = true;
         _lastSendWake = millis();
     }
 
