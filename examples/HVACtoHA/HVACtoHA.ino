@@ -52,7 +52,7 @@ void setup() {
     if (MDNS.begin(hostname)) Serial.printf("mDNS responder started\nWeb update url: http://%s.local/update\n", hostname);
     #if defined(ESP32)
     httpUpdater.setup(&httpServer, String(update_path), String(update_username), String(update_password));
-    #elseCompressorMode
+    #else
     httpUpdater.setup(&httpServer, update_path, update_username, update_password);
     #endif
     httpServer.begin();
