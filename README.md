@@ -32,10 +32,10 @@ This library can make Arduino/NodeMCU communicate with Toshiba/Carrier HVAC Syst
 ## Header & Connector pinout
 See images [here](/images)
  
-## Sample Circuit
+## Sample Circuit (ESP01-adapter)
 Note: If using ESP8266 or ESP32 please always use with TTL level shifter (5V to 3.3V TTL)
  
-![Sample Circuit](images/circuit.png?raw=true "Sample Circuit")
+![ESP01-adapter Circuit](images/esp01-adapter_wiring.jpg?raw=true "ESP01-adapter wiring diagram")
  
 ## How to use
  
@@ -191,7 +191,21 @@ The custom packet size must be 8 to 17 bytes. This function just send your packe
 byte myPacket[] = {2, 0, 3, 144, 0, 0, 9, 1, 48, 1, 0, 0, 0, 2, 163, 65, 76};
 hvac.sendCustomPacket(myPacket, sizeof(myPacket));
 ```
+## Making a prototype board
+Use KiCad to design a prototype board. The cost of components and PCB is around $2.5/pices.
+- Schematics.
+![prototype schematics](images/prototype_sch.jpg?raw=true "prototype schematics")
+
+- PCB
+![prototype pcb](images/prototype_pcb.png?raw=true "prototype pcb")
+
+- Wiring
+![prototype wiring](images/prototype_wiring.jpg?raw=true "prototype wiring")
+
+- Final
+![prototype](images/prototype.jpg?raw=true "prototype")
 
 ## TO DO:
 - [x] Send custom packet
+- [x] Prototype board
 - [ ] Callback function for debug

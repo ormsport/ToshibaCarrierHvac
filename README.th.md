@@ -35,7 +35,7 @@
 ## วงจรตัวอย่าง
 ข้อควรระวัง: กรณีใช้กับ ESP8266 หรือ ESP32 ควรใช้งานร่วมกับ TTL level shifter (5V to 3.3V TTL)
 
-![วงจรตัวอย่าง](images/circuit.png?raw=true "วงจรตัวอย่าง")
+![วงจรตัวอย่าง](images/esp01-adapter_wiring.jpg?raw=true "วงจรตัวอย่าง")
 
 ## วิธีใช้งาน
 
@@ -191,6 +191,21 @@ byte myPacket[] = {2, 0, 3, 144, 0, 0, 9, 1, 48, 1, 0, 0, 0, 2, 163, 65, 76};
 hvac.sendCustomPacket(myPacket, sizeof(myPacket));
 ```
 
+## ออกแบบและทำบอร์ดต้นแบบ
+ใช้โปรแกรม KiCad ในการออกแบบ. ค่าใช้จ่ายในการสั่งทำ PCB รวมค่าอุปกรณ์ ตกชิ้นละประมาณ 80 บาท
+- วงจร
+![prototype schematics](images/prototype_sch.jpg?raw=true "prototype schematics")
+
+- PCB
+![prototype pcb](images/prototype_pcb.png?raw=true "prototype pcb")
+
+- การต่อสาย
+![prototype wiring](images/prototype_wiring.jpg?raw=true "prototype wiring")
+
+- ผลลัพธ์
+![prototype](images/prototype.jpg?raw=true "prototype")
+
 ## จะทำเร็วๆนี้:
 - [x] ส่งแพ็คเก็ตที่สร้างขึ้นเอง
+- [x] ออกแบบและทำบอร์ดต้นแบบ
 - [ ] ฟังก์ชั่นเรียกกลับสำหรับการ debug
