@@ -14,7 +14,7 @@
   - Carrier X Inverter Plus 2024 (42TVAB)
 
 #### อาจรองรับ (ยังไม่ได้ทดสอบ):
-  - Carrier Color Smart (42TVCA)
+  - Carrier Color Smart (42TVCA) 
 
 ## รองรับการสั่งงาน:
  - เปิด/ปิด
