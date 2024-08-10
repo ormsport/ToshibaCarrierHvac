@@ -58,6 +58,7 @@ struct hvacSettings {
     const char* pure;
     const char* powerSelect;
     const char* operation;
+    const char* wifiLed;
 };
 
 // hvac status structure
@@ -123,8 +124,8 @@ class ToshibaCarrierHvac {
         const byte PACKET_TYPE[5]      = {16, 17, 128, 130, 144};
         const char* PACKET_TYPE_MAP[6] = {"COMMAND", "FEEDBACK", "SYN/ACK", "ACK", "REPLY", "UNKNOWN"};
 
-        const byte FUNCTION_BYTE[14] = {128, 135, 136, 144, 148, 160, 163, 176, 179, 187, 190, 199, 247, 248};
-        const char* FUNCTION_BYTE_MAP[15] = {"STATE", "PSEL", "STATUS", "ONTIMER","OFFTIMER", "FANMODE", "SWING", "MODE", "SETPOINT", "ROOMTEMP", "OUTSIDETEMP", "PURE", "OP", "FN_GROUP_1", "UNKNOWN"};
+        const byte FUNCTION_BYTE[15] = {128, 135, 136, 144, 148, 160, 163, 176, 179, 187, 190, 199, 222, 247, 248};
+        const char* FUNCTION_BYTE_MAP[16] = {"STATE", "PSEL", "STATUS", "ONTIMER","OFFTIMER", "FANMODE", "SWING", "MODE", "SETPOINT", "ROOMTEMP", "OUTSIDETEMP", "PURE", "WIFILED", "OP", "FN_GROUP_1", "UNKNOWN"};
 
         const byte MODE_BYTE[5] = {65, 66, 67, 68, 69};
         const char* MODE_BYTE_MAP[6] = {"auto", "cool", "heat", "dry", "fan_only", "UNKNOWN"};
@@ -135,16 +136,19 @@ class ToshibaCarrierHvac {
         const byte PSEL_BYTE[3] = {50, 75, 100};
         const char* PSEL_BYTE_MAP[4] = {"50%", "75%", "100%", "UNKNOWN"};
 
-        const byte OP_BYTE[5] = {0, 1, 2, 3, 10};
-        const char* OP_BYTE_MAP[6] = {"normal", "high_power", "silent_1", "eco", "silent_2", "UNKNOWN"};
+        const byte OP_BYTE[8] = {0, 1, 2, 3, 4, 10, 32, 48};
+        const char* OP_BYTE_MAP[9] = {"normal", "high_power", "silent_1", "eco", "eight_deg", "silent_2", "fireplace_1", "fireplace_2", "UNKNOWN"};
 
         const byte STATUS_BYTE[1] = {66};
         const char* STATUS_BYTE_MAP[2] = {"READY", "UNKNOWN"};
 
-        const byte SWING_BYTE[2] = {49, 65};
+        const byte SWING_BYTE[9] = {49, 65, 66, 67, 80, 81, 82, 83, 84};
+        const char* SWING_BYTE_MAP[10] = {"fix", "v_swing", "h_swing", "hv_swing", "fix_pos_1", "fix_pos_2", "fix_pos_3", "fix_pos_4", "fix_pos_5", "UNKNOWN"};
+
         const byte STATE_BYTE[2] = {49, 48};
         const byte PURE_BYTE[2] = {16, 24};
         const byte TIMER_BYTE[2] = {66, 65};
+        const byte WIFILED_BYTE[2] = {0, 5};
         const char* OFF_ON_MAP[3] = {"off", "on", "UNKNOWN"};
 
         void sendPacket(byte data[], size_t dataLen);
@@ -186,6 +190,7 @@ class ToshibaCarrierHvac {
         void setPure(const char* newPure);
         void setPowerSelect(const char* newPowerSelect);
         void setOperation(const char* newOperation);
+        void setWifiLed(const char* newWifiLed);
         hvacStatus getStatus(void);
         hvacSettings getSettings(void);
         int8_t getRoomTemperature(void);
@@ -200,6 +205,7 @@ class ToshibaCarrierHvac {
         const char* getOnTimer(void);
         const char* getPowerSelect(void);
         const char* getOperation(void);
+        const char* getWifiLed(void);
         bool isCduRunning(void);
         bool isConnected(void);
         void forceQueryAllData(void);
