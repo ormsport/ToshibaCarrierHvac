@@ -20,10 +20,11 @@ This library can make Arduino/NodeMCU communicate with Toshiba/Carrier HVAC Syst
  - Setpoint (17-30c)
  - Mode ("auto", "cool", "heat", "dry", "fan_only")
  - Fan mode ("quiet", "lvl_1", "lvl_2", "lvl_3", "lvl_4", "lvl_5", "auto")
- - Swing (vertical) ("off", "on")
+ - Swing (vertical) ("fix", "v_swing", "h_swing", "vh_swing", "fix_pos_1", "fix_pos_2", "fix_pos_3", "fix_pos_4", "fix_pos_5", )
  - Pure ("off", "on")
  - Power select ("50%", "75%", "100%")
- - Operation ("normal", "high_power", "silent_1", "eco", "silent_2")
+ - Operation ("normal", "high_power", "silent_1", "eco", "eight_deg", "silent_2", "fireplace_1", "fireplace_2")
+ - Front panel WiFi LED ("off", "on")
  - Room temperature
  - Outside temperature
  - On/off timer status ("off", "on")
