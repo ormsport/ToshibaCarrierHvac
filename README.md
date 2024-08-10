@@ -10,10 +10,10 @@ This library can make Arduino/NodeMCU communicate with Toshiba/Carrier HVAC Syst
   - Toshiba Seiya
   - Toshiba Shorai
   - Carrier X Inverter (42TVAA)
+  - Carrier X Inverter Plus 2024 (42TVAB)
 
 #### And might support (not tested yet):
   - Carrier Color Smart (42TVCA)
-  - Carrier X Inverter Plus (42TVAB)
 
 ## Supported features:
  - Power ("off", "on")

@@ -11,10 +11,10 @@
   - Toshiba Seiya
   - Toshiba Shorai
   - Carrier X Inverter (42TVAA)
+  - Carrier X Inverter Plus 2024 (42TVAB)
 
 #### อาจรองรับ (ยังไม่ได้ทดสอบ):
   - Carrier Color Smart (42TVCA)
-  - Carrier X Inverter Plus (42TVAB)
 
 ## รองรับการสั่งงาน:
  - เปิด/ปิด
