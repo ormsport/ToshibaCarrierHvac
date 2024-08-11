@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.
 - Fireplace mode.
 - 8 Degree mode.
 
-# Known issue
+### Known issue
 - If use with older model the MCU will randomly reboot when pulling some data from AC.
 
 ## 1.0.1 - 2022-06-06
