@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Strcasecmp crash.
+- Front panel WiFi LED not working as expected.
 
 ## 1.1 2024-08-11
 ### Notes
