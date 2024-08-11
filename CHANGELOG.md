@@ -1,9 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.1 2024-08-11
+## 1.11 2024-08-11
+### Notes
+- Working with older models normally.
 
-# Notes
+### Fixed
+- Strcasecmp crash.
+
+## 1.1 2024-08-11
+### Notes
 - Tested on model year 2024 (42TVAB).
 
 ### Added
