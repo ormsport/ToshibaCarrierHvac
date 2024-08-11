@@ -1,7 +1,7 @@
 #include "ToshibaCarrierHvac.h"
 
 #define BUADRATE 9600                       // buadrate
-#define MAX_RX_BYTE_READ 251                // max bytes read
+#define MAX_RX_BYTE_READ 250                // max bytes read
 #define RX_READ_TIMEOUT 250                 // read timeout(ms)
 #define IDLE_TIMEOUT 1                      // max timeout(minutes) after received data, try to query temperature to check the connection (should not exceed than 3 minutes)
 #define CONNECTION_TIMEOUT 2                // max timeout(minutes) after sent some query or command but no reply in time, that's mean connection break or disconnected, try to send new handshake
@@ -265,7 +265,7 @@ bool ToshibaCarrierHvac::syncUserSettings(void) {
         wantedSettings.swing = userSettings.swing;
         byte data[2];
         data[0] = getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "SWING");
-        data[1] = getByteByName(SWING_BYTE, OFF_ON_MAP, sizeof(SWING_BYTE), wantedSettings.swing);
+        data[1] = getByteByName(SWING_BYTE, SWING_BYTE_MAP, sizeof(SWING_BYTE), wantedSettings.swing);
         createPacket(PACKET_HEADER, sizeof(PACKET_HEADER), 16, data, sizeof(data));
         #ifdef HVAC_DEBUG
         DEBUG_PORT.print(F("HVAC> User wanted Swing-> "));
@@ -322,6 +322,19 @@ bool ToshibaCarrierHvac::syncUserSettings(void) {
         #ifdef HVAC_DEBUG
         DEBUG_PORT.print(F("HVAC> User wanted Operation-> "));
         DEBUG_PORT.println(wantedSettings.operation);
+        #endif
+        _lastSyncSettings = millis();
+        return true;
+    }
+    if (strcasecmp(wantedSettings.wifiLed, userSettings.wifiLed) != 0) {    // wifi led
+        wantedSettings.wifiLed = userSettings.wifiLed;
+        byte data[2];
+        data[0] = getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "WIFILED");
+        data[1] = getByteByName(WIFILED_BYTE, OFF_ON_MAP, sizeof(WIFILED_BYTE), wantedSettings.wifiLed);
+        createPacket(PACKET_HEADER, sizeof(PACKET_HEADER), 16, data, sizeof(data));
+        #ifdef HVAC_DEBUG
+        DEBUG_PORT.print(F("HVAC> User wanted Wifi LED-> "));
+        DEBUG_PORT.println(wantedSettings.wifiLed);
         #endif
         _lastSyncSettings = millis();
         return true;
@@ -691,7 +704,7 @@ bool ToshibaCarrierHvac::processData(byte data[], size_t dataLen) {
                     #ifdef HVAC_DEBUG
                     DEBUG_PORT.print(F("Swing-> "));
                     #endif
-                    receiveSettings.swing = getNameByByte(OFF_ON_MAP, SWING_BYTE, sizeof(SWING_BYTE), data[1]);
+                    receiveSettings.swing = getNameByByte(SWING_BYTE_MAP, SWING_BYTE, sizeof(SWING_BYTE), data[1]);
                     #ifdef HVAC_DEBUG
                     DEBUG_PORT.println(receiveSettings.swing);
                     #endif
@@ -837,6 +850,36 @@ bool ToshibaCarrierHvac::processData(byte data[], size_t dataLen) {
                     }
                     return false;
                 }
+                if (data[0] == getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "WIFILED")) {    // wifi led
+                    #ifdef HVAC_DEBUG
+                    DEBUG_PORT.print(F("WifiLED-> "));
+                    #endif
+                    receiveSettings.wifiLed = getNameByByte(OFF_ON_MAP, WIFILED_BYTE, sizeof(WIFILED_BYTE), data[1]);
+                    #ifdef HVAC_DEBUG
+                    DEBUG_PORT.println(receiveSettings.wifiLed);
+                    #endif
+                    if (currentSettings.wifiLed != receiveSettings.wifiLed) {
+                        if (settingsUpdatedCallback) {
+                            wantedSettings.wifiLed = userSettings.wifiLed = currentSettings.wifiLed = receiveSettings.wifiLed;
+                            _settingsCallbackBucket++;
+                            _lastSettingsCallback = millis();
+                            return true;
+                        } else if (updateCallback) {
+                            wantedSettings.wifiLed = userSettings.wifiLed = currentSettings.wifiLed = receiveSettings.wifiLed;
+                            _updateCallbackBucket++;
+                            _lastUpdateCallback = millis();
+                            return true;
+                        } else if (whichFunctionUpdatedCallback) {
+                            wantedSettings.wifiLed = userSettings.wifiLed = currentSettings.wifiLed = receiveSettings.wifiLed;
+                            whichFunctionUpdatedCallback(getNameByByte(FUNCTION_BYTE_MAP, FUNCTION_BYTE, sizeof(FUNCTION_BYTE), data[0]));
+                            return true;
+                        } else {
+                            wantedSettings.wifiLed = userSettings.wifiLed = currentSettings.wifiLed = receiveSettings.wifiLed;
+                            return true;
+                        }
+                    }
+                    return false;
+                }
                 #ifdef HVAC_DEBUG
                 DEBUG_PORT.println(F("error: Received unknown function, skipped"));
                 #endif
@@ -897,6 +940,12 @@ bool ToshibaCarrierHvac::processData(byte data[], size_t dataLen) {
         if (data[0] == getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "OP")) {    // operation
             #ifdef HVAC_DEBUG
             DEBUG_PORT.println(F("OP"));
+            #endif
+            return createPacket(PACKET_HEADER, sizeof(PACKET_HEADER), 16, data, 1);
+        }
+        if (data[0] == getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "WIFILED")) {    // wifi led
+            #ifdef HVAC_DEBUG
+            DEBUG_PORT.println(F("WifiLED"));
             #endif
             return createPacket(PACKET_HEADER, sizeof(PACKET_HEADER), 16, data, 1);
         }
@@ -1094,8 +1143,8 @@ bool ToshibaCarrierHvac::packetMonitor(void) {
 }
 
 void ToshibaCarrierHvac::queryall(void) {
-    byte fn[9] = {128, 135, 144, 148, 163, 187, 190, 199, 248};
-    for (uint8_t i=0; i<9; i++) {
+    byte fn[10] = {128, 135, 144, 148, 163, 187, 190, 199, 222, 248};
+    for (uint8_t i=0; i<10; i++) {
         byte data[1] = {fn[i]};
         createPacket(PACKET_HEADER, sizeof(PACKET_HEADER), 16, data, 1);
         delay(200);
@@ -1234,6 +1283,10 @@ void ToshibaCarrierHvac::setOperation(const char* newOperation) {
     userSettings.operation = newOperation;
 }
 
+void ToshibaCarrierHvac::setWifiLed(const char* newWifiLed) {
+    userSettings.wifiLed = newWifiLed;
+}
+
 hvacStatus ToshibaCarrierHvac::getStatus(void) {
     return currentStatus;
 }
@@ -1284,6 +1337,10 @@ const char* ToshibaCarrierHvac::getOnTimer(void) {
 
 const char* ToshibaCarrierHvac::getPowerSelect(void) {
     return currentSettings.powerSelect;
+}
+
+const char* ToshibaCarrierHvac::getWifiLed(void) {
+    return currentSettings.wifiLed;
 }
 
 const char* ToshibaCarrierHvac::getOperation(void) {
