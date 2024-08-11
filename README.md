@@ -76,6 +76,7 @@ struct hvacSettings {
     const char* pure;
     const char* powerSelect;
     const char* operation;
+    const char* wifiLed;
 };
 ```
  
