@@ -329,8 +329,14 @@ bool ToshibaCarrierHvac::syncUserSettings(void) {
     if (strcasecmp(wantedSettings.wifiLed, userSettings.wifiLed) != 0) {    // wifi led
         wantedSettings.wifiLed = userSettings.wifiLed;
         byte data[2];
-        data[0] = getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "WIFILED");
-        data[1] = getByteByName(WIFILED_BYTE, OFF_ON_MAP, sizeof(WIFILED_BYTE), wantedSettings.wifiLed);
+        if (!_wifiled) {    // wifi led 1
+            data[0] = getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "WIFILED1");
+            data[1] = getByteByName(WIFILED1_BYTE, OFF_ON_MAP, sizeof(WIFILED1_BYTE), wantedSettings.wifiLed);
+        } else {    // wifi led 2
+            data[0] = getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "WIFILED2");
+            data[1] = getByteByName(WIFILED2_BYTE, OFF_ON_MAP, sizeof(WIFILED2_BYTE), wantedSettings.wifiLed);
+        }
+        
         createPacket(PACKET_HEADER, sizeof(PACKET_HEADER), 16, data, sizeof(data));
         #ifdef HVAC_DEBUG
         DEBUG_PORT.print(F("HVAC> User wanted Wifi LED-> "));
@@ -850,11 +856,43 @@ bool ToshibaCarrierHvac::processData(byte data[], size_t dataLen) {
                     }
                     return false;
                 }
-                if (data[0] == getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "WIFILED")) {    // wifi led
+                if (data[0] == getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "WIFILED1")) {    // wifi led 1
+                    _wifiled = false;
                     #ifdef HVAC_DEBUG
-                    DEBUG_PORT.print(F("WifiLED-> "));
+                    DEBUG_PORT.print(F("WifiLED1-> "));
                     #endif
-                    receiveSettings.wifiLed = getNameByByte(OFF_ON_MAP, WIFILED_BYTE, sizeof(WIFILED_BYTE), data[1]);
+                    receiveSettings.wifiLed = getNameByByte(OFF_ON_MAP, WIFILED1_BYTE, sizeof(WIFILED1_BYTE), data[1]);
+                    #ifdef HVAC_DEBUG
+                    DEBUG_PORT.println(receiveSettings.wifiLed);
+                    #endif
+                    if (currentSettings.wifiLed != receiveSettings.wifiLed) {
+                        if (settingsUpdatedCallback) {
+                            wantedSettings.wifiLed = userSettings.wifiLed = currentSettings.wifiLed = receiveSettings.wifiLed;
+                            _settingsCallbackBucket++;
+                            _lastSettingsCallback = millis();
+                            return true;
+                        } else if (updateCallback) {
+                            wantedSettings.wifiLed = userSettings.wifiLed = currentSettings.wifiLed = receiveSettings.wifiLed;
+                            _updateCallbackBucket++;
+                            _lastUpdateCallback = millis();
+                            return true;
+                        } else if (whichFunctionUpdatedCallback) {
+                            wantedSettings.wifiLed = userSettings.wifiLed = currentSettings.wifiLed = receiveSettings.wifiLed;
+                            whichFunctionUpdatedCallback(getNameByByte(FUNCTION_BYTE_MAP, FUNCTION_BYTE, sizeof(FUNCTION_BYTE), data[0]));
+                            return true;
+                        } else {
+                            wantedSettings.wifiLed = userSettings.wifiLed = currentSettings.wifiLed = receiveSettings.wifiLed;
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                if (data[0] == getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "WIFILED2")) {    // wifi led 2
+                    _wifiled = true;
+                    #ifdef HVAC_DEBUG
+                    DEBUG_PORT.print(F("WifiLED2-> "));
+                    #endif
+                    receiveSettings.wifiLed = getNameByByte(OFF_ON_MAP, WIFILED2_BYTE, sizeof(WIFILED2_BYTE), data[1]);
                     #ifdef HVAC_DEBUG
                     DEBUG_PORT.println(receiveSettings.wifiLed);
                     #endif
@@ -943,7 +981,8 @@ bool ToshibaCarrierHvac::processData(byte data[], size_t dataLen) {
             #endif
             return createPacket(PACKET_HEADER, sizeof(PACKET_HEADER), 16, data, 1);
         }
-        if (data[0] == getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "WIFILED")) {    // wifi led
+        if (data[0] == getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "WIFILED1") ||
+            data[0] == getByteByName(FUNCTION_BYTE, FUNCTION_BYTE_MAP, sizeof(FUNCTION_BYTE), "WIFILED2")) {    // wifi led 1 and 2
             #ifdef HVAC_DEBUG
             DEBUG_PORT.println(F("WifiLED"));
             #endif
@@ -1143,8 +1182,8 @@ bool ToshibaCarrierHvac::packetMonitor(void) {
 }
 
 void ToshibaCarrierHvac::queryall(void) {
-    byte fn[10] = {128, 135, 144, 148, 163, 187, 190, 199, 222, 248};
-    for (uint8_t i=0; i<10; i++) {
+    byte fn[11] = {128, 135, 144, 148, 163, 187, 190, 199, 222, 223, 248};
+    for (uint8_t i=0; i<11; i++) {
         byte data[1] = {fn[i]};
         createPacket(PACKET_HEADER, sizeof(PACKET_HEADER), 16, data, 1);
         delay(200);

@@ -80,6 +80,7 @@ class ToshibaCarrierHvac {
         bool _connected = false;
         bool _init = false;
         bool _sendWake = false;
+        bool _wifiled = false;  // wifi LED 1 or 2
         uint32_t _lastReceive = 0;
         uint32_t _lastSendWake = 0;
         uint32_t _idleTimeout = 0;
@@ -124,8 +125,8 @@ class ToshibaCarrierHvac {
         const byte PACKET_TYPE[5]      = {16, 17, 128, 130, 144};
         const char* PACKET_TYPE_MAP[6] = {"COMMAND", "FEEDBACK", "SYN/ACK", "ACK", "REPLY", "UNKNOWN"};
 
-        const byte FUNCTION_BYTE[15] = {128, 135, 136, 144, 148, 160, 163, 176, 179, 187, 190, 199, 222, 247, 248};
-        const char* FUNCTION_BYTE_MAP[16] = {"STATE", "PSEL", "STATUS", "ONTIMER","OFFTIMER", "FANMODE", "SWING", "MODE", "SETPOINT", "ROOMTEMP", "OUTSIDETEMP", "PURE", "WIFILED", "OP", "FN_GROUP_1", "UNKNOWN"};
+        const byte FUNCTION_BYTE[16] = {128, 135, 136, 144, 148, 160, 163, 176, 179, 187, 190, 199, 222, 223, 247, 248};
+        const char* FUNCTION_BYTE_MAP[17] = {"STATE", "PSEL", "STATUS", "ONTIMER","OFFTIMER", "FANMODE", "SWING", "MODE", "SETPOINT", "ROOMTEMP", "OUTSIDETEMP", "PURE", "WIFILED1", "WIFILED2", "OP", "FN_GROUP_1", "UNKNOWN"};
 
         const byte MODE_BYTE[5] = {65, 66, 67, 68, 69};
         const char* MODE_BYTE_MAP[6] = {"auto", "cool", "heat", "dry", "fan_only", "UNKNOWN"};
@@ -148,7 +149,8 @@ class ToshibaCarrierHvac {
         const byte STATE_BYTE[2] = {49, 48};
         const byte PURE_BYTE[2] = {16, 24};
         const byte TIMER_BYTE[2] = {66, 65};
-        const byte WIFILED_BYTE[2] = {0, 5};
+        const byte WIFILED1_BYTE[2] = {0, 5};
+        const byte WIFILED2_BYTE[2] = {128, 0};
         const char* OFF_ON_MAP[3] = {"off", "on", "UNKNOWN"};
 
         void sendPacket(byte data[], size_t dataLen);
