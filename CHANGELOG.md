@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.11 2024-08-11
+## 1.1.1 2024-08-11
 ### Notes
 - Working with older models normally.
 
@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - Strcasecmp crash.
 - Front panel WiFi LED not working as expected.
 
-## 1.1 2024-08-11
+## 1.1.0 2024-08-11
 ### Notes
 - Tested on model year 2024 (42TVAB).
 
