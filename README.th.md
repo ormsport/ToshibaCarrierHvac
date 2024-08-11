@@ -11,19 +11,20 @@
   - Toshiba Seiya
   - Toshiba Shorai
   - Carrier X Inverter (42TVAA)
+  - Carrier X Inverter Plus 2024 (42TVAB)
 
 #### อาจรองรับ (ยังไม่ได้ทดสอบ):
-  - Carrier Color Smart (42TVCA)
-  - Carrier X Inverter Plus (42TVAB)
+  - Carrier Color Smart (42TVCA) 
 
 ## รองรับการสั่งงาน:
  - เปิด/ปิด
  - ปรับโหมด (auto, cool, dry, fan_only)
  - ปรับระดับความแรงลม
- - เปิด/ปิดการส่ายใบปรับทิศทางลม (แนวตั้ง)
+ - การส่ายใบปรับทิศทางลม (คงที่, แนวตั้ง, แนวนอนม, แนวตั้งและแนวนอน, ตำแน่งที่ 1, ตำแน่งที่ 2, ตำแน่งที่ 3,ตำแน่งที่ 4, ตำแน่งที่ 5)
  - เปิด/ปิดระบบฟอกอากาศพลาสมาไอออน (Pure)
  - เลือกระดับการใช้พลังงาน (PSEL)
- - เลือกการทำงาน (High Power, ECO, Silent1, Silent2)
+ - เลือกการทำงาน (High Power, ECO, Silent1, Silent2, 8Degree, Fireplace1, Fireplace2)
+ - เปิด/ปิดไฟสถานะ WiFi หน้าเครื่อง
  - ดูอุณหภูมิภายในห้อง
  - ดูอุณหภูมิภายนอก
  - ดูสถานะการตั้งเวลาเปิด/ปิด

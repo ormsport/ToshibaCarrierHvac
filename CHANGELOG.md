@@ -1,6 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.1 2024-08-11
+
+# Notes
+- Tested on model year 2024 (42TVAB).
+
+### Added
+- Horizontal vane swing.
+- Vertical and horizontal vane swing at the same time.
+- 5 Fixed vertical vane positions.
+- Ability to turn on/off wifi LED on front panel.
+- Fireplace mode.
+- 8 Degree mode.
+
+# Known issue
+- If use with older model the MCU will randomly reboot when pulling some data from AC.
+
 ## 1.0.1 - 2022-06-06
 ### Added
 - Ability to send a custom packet.
